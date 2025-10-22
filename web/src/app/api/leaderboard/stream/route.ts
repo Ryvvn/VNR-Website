@@ -32,7 +32,7 @@ export async function GET(req: Request) {
     removeClient(writer);
   };
   try {
-    (req as any).signal?.addEventListener?.("abort", onAbort);
+    req.signal?.addEventListener("abort", onAbort);
   } catch {}
 
   return new Response(stream.readable, {

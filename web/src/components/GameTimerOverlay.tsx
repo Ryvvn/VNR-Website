@@ -8,6 +8,18 @@ type Props = {
   syncWithUnity?: boolean;
 };
 
+// Typed detail for Unity timer events dispatched from WebGL
+interface UnityTimerDetail { seconds: number }
+
+declare global {
+  interface Window {
+    Module?: {
+      canvas?: HTMLCanvasElement;
+      keyboardEventTarget?: EventTarget;
+    };
+  }
+}
+
 export default function GameTimerOverlay({ seconds = 480, onEnd, playerName, syncWithUnity = true }: Props) {
   const [timeLeft, setTimeLeft] = React.useState(seconds);
   const [ended, setEnded] = React.useState(false);
@@ -15,12 +27,14 @@ export default function GameTimerOverlay({ seconds = 480, onEnd, playerName, syn
 
   React.useEffect(() => {
     if (!syncWithUnity) return;
-    const onInit = (e: any) => {
-      const s = Math.round(e?.detail?.seconds ?? seconds);
+    const onInit = (e: Event) => {
+      const detail = (e as CustomEvent<UnityTimerDetail>).detail;
+      const s = Math.round(detail?.seconds ?? seconds);
       setTimeLeft(s);
     };
-    const onTick = (e: any) => {
-      const s = Math.round(e?.detail?.seconds ?? 0);
+    const onTick = (e: Event) => {
+      const detail = (e as CustomEvent<UnityTimerDetail>).detail;
+      const s = Math.round(detail?.seconds ?? 0);
       setTimeLeft(s);
       if (s <= 0 && !ended) {
         setEnded(true);
@@ -28,32 +42,32 @@ export default function GameTimerOverlay({ seconds = 480, onEnd, playerName, syn
         try {
           const canvas = document.getElementById("unity-canvas") as HTMLCanvasElement | null;
           if (canvas) canvas.style.pointerEvents = "none";
-          const Module = (window as any).Module;
+          const Module = window.Module;
           if (Module) Module.keyboardEventTarget = document;
         } catch { }
         try { onEnd?.(); } catch { }
       }
     };
-    const onEnded = () => {
+    const onEnded: EventListener = () => {
       if (!ended) {
         setEnded(true);
         try { document.exitPointerLock?.(); } catch { }
         try {
           const canvas = document.getElementById("unity-canvas") as HTMLCanvasElement | null;
           if (canvas) canvas.style.pointerEvents = "none";
-          const Module = (window as any).Module;
+          const Module = window.Module;
           if (Module) Module.keyboardEventTarget = document;
         } catch { }
         try { onEnd?.(); } catch { }
       }
     };
-    window.addEventListener("unity-timer-init", onInit as any);
-    window.addEventListener("unity-time-remaining", onTick as any);
-    window.addEventListener("unity-timer-ended", onEnded as any);
+    window.addEventListener("unity-timer-init", onInit);
+    window.addEventListener("unity-time-remaining", onTick);
+    window.addEventListener("unity-timer-ended", onEnded);
     return () => {
-      window.removeEventListener("unity-timer-init", onInit as any);
-      window.removeEventListener("unity-time-remaining", onTick as any);
-      window.removeEventListener("unity-timer-ended", onEnded as any);
+      window.removeEventListener("unity-timer-init", onInit);
+      window.removeEventListener("unity-time-remaining", onTick);
+      window.removeEventListener("unity-timer-ended", onEnded);
     };
   }, [syncWithUnity, seconds, ended, onEnd]);
 
@@ -72,7 +86,7 @@ export default function GameTimerOverlay({ seconds = 480, onEnd, playerName, syn
         try {
           const canvas = document.getElementById("unity-canvas") as HTMLCanvasElement | null;
           if (canvas) canvas.style.pointerEvents = "none";
-          const Module = (window as any).Module;
+          const Module = window.Module;
           if (Module) Module.keyboardEventTarget = document;
         } catch { }
         try { onEnd?.(); } catch { }
@@ -89,7 +103,9 @@ export default function GameTimerOverlay({ seconds = 480, onEnd, playerName, syn
       try {
         const res = await fetch("/api/leaderboard", { cache: "no-store" });
         const data = await res.json();
-        const entry = Array.isArray(data?.entries) ? data.entries.find((e: any) => e.playerName === name) : null;
+        type Entry = { playerName: string; score: number; updates: number; lastUpdate?: string };
+        const entries: Entry[] | undefined = Array.isArray(data?.entries) ? (data.entries as Entry[]) : undefined;
+        const entry = entries?.find((e) => e.playerName === name);
         if (entry && typeof entry.score === "number") setFinalScore(entry.score);
       } catch { }
     })();

@@ -17,8 +17,8 @@ export function removeClient(writer: Writer) {
   }
 }
 
-export function broadcast(event: string, data: any) {
-  const payload = typeof data === "string" ? data : JSON.stringify(data);
+export function broadcast<T>(event: string, data: T) {
+  const payload = typeof data === "string" ? data : JSON.stringify(data as unknown as Record<string, unknown>);
   const msg = `event: ${event}\n` + `data: ${payload}\n\n`;
   for (const w of Array.from(clients)) {
     try {

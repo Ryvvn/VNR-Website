@@ -3,10 +3,34 @@ import React from "react";
 import Leaderboard from "@/components/Leaderboard";
 import GameTimerOverlay from "@/components/GameTimerOverlay";
 
-// Declare Unity loader global
+// Unity loader typings
+interface UnityLoaderConfig {
+  dataUrl: string;
+  frameworkUrl: string;
+  codeUrl: string;
+  streamingAssetsUrl?: string;
+  companyName?: string;
+  productName?: string;
+  productVersion?: string;
+}
+
+interface UnityInstance {
+  SendMessage: (objectName: string, methodName: string, value?: string | number) => void;
+  Quit: () => Promise<void> | void;
+}
+
+// Declare Unity globals
 declare global {
   interface Window {
-    createUnityInstance?: (canvas: HTMLCanvasElement, config: any, onProgress?: (p: number) => void) => Promise<any>;
+    createUnityInstance?: (
+      canvas: HTMLCanvasElement,
+      config: UnityLoaderConfig,
+      onProgress?: (p: number) => void
+    ) => Promise<UnityInstance>;
+    Module?: {
+      canvas?: HTMLCanvasElement;
+      keyboardEventTarget?: EventTarget;
+    };
   }
 }
 
@@ -14,7 +38,7 @@ export default function GamePage() {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
   const nameInputRef = React.useRef<HTMLInputElement | null>(null);
   const [unityLoaded, setUnityLoaded] = React.useState(false);
-  const [unityInstance, setUnityInstance] = React.useState<any>(null);
+  const [unityInstance, setUnityInstance] = React.useState<UnityInstance | null>(null);
   const [progress, setProgress] = React.useState(0);
   const [playerName, setPlayerName] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
@@ -38,15 +62,16 @@ export default function GamePage() {
           const res = await fetch(c.url, { cache: "no-cache" });
           const text = await res.text();
           return { name: c.name, url: c.url, ok: res.ok, status: res.status, length: text.length };
-        } catch (e: any) {
-          return { name: c.name, url: c.url, ok: false, error: e?.message || String(e) };
+        } catch (e: unknown) {
+          const message = e instanceof Error ? e.message : String(e);
+          return { name: c.name, url: c.url, ok: false, error: message };
         }
       })
     ).then(setAssetChecks);
 
     return () => {
-      if (unityInstance && unityInstance.Quit) {
-        unityInstance.Quit();
+      if (unityInstance && "Quit" in unityInstance) {
+        try { (unityInstance as UnityInstance).Quit(); } catch {}
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -59,7 +84,7 @@ export default function GamePage() {
         return;
       }
       const canvas = canvasRef.current!;
-      const config = {
+      const config: UnityLoaderConfig = {
         dataUrl: `${buildBase}.data.br`,
         frameworkUrl: `${buildBase}.framework.js.br`,
         codeUrl: `${buildBase}.wasm.br`,
@@ -77,7 +102,7 @@ export default function GamePage() {
       // Ensure leaderboard posts are attempt-based (total only)
       try { inst.SendMessage("LeaderboardReporter", "SetSubmitModeTotal", "true"); } catch { }
       // Unity owns cursor/pointer control. No web-side pointer management here.
-    } catch (e) {
+    } catch (e: unknown) {
       console.error(e);
       const msg = e instanceof Error ? e.message : typeof e === "string" ? e : JSON.stringify(e);
       setError(`Failed to initialize Unity: ${msg}`);
@@ -93,9 +118,9 @@ export default function GamePage() {
     canvas.tabIndex = 0; // allow keyboard focus
 
     // Direct keyboard while starting
-    (window as any).Module = (window as any).Module || {};
-    (window as any).Module.canvas = canvas;
-    (window as any).Module.keyboardEventTarget = document;
+    window.Module = window.Module || {};
+    window.Module.canvas = canvas;
+    window.Module.keyboardEventTarget = document;
 
     const maybeStart = () => initUnity();
 
