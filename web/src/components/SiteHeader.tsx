@@ -13,7 +13,9 @@ export default function SiteHeader() {
 
           <nav className="hidden sm:flex items-center gap-4 text-sm">
             <Link href="#timeline" className="text-gray-700 hover:text-gray-900 transition-colors">Timeline</Link>
-            {/* Future links can be added here without changing layout */}
+            <Link href="/game" className="text-gray-700 hover:text-gray-900 transition-colors">Game</Link>
+            <Link href="/leaderboard" className="text-gray-700 hover:text-gray-900 transition-colors">Leaderboard</Link>
+            <Link href="/tutorial" className="text-gray-700 hover:text-gray-900 transition-colors">Tutorial</Link>
           </nav>
         </div>
       </div>

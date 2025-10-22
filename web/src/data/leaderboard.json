@@ -1,0 +1,29 @@
+{
+  "entries": [
+    {
+      "playerName": "Tester",
+      "score": 15,
+      "updates": 1,
+      "lastUpdate": "2025-10-21T15:09:24.350Z"
+    },
+    {
+      "playerName": "ryan",
+      "score": 0,
+      "updates": 3,
+      "lastUpdate": "2025-10-22T11:18:13.883Z"
+    },
+    {
+      "playerName": "Ryan",
+      "score": 0,
+      "updates": 21,
+      "lastUpdate": "2025-10-22T11:17:27.645Z"
+    },
+    {
+      "playerName": "gray",
+      "score": 0,
+      "updates": 1,
+      "lastUpdate": "2025-10-22T10:54:33.404Z"
+    }
+  ],
+  "updatedAt": "2025-10-22T11:18:13.883Z"
+}
