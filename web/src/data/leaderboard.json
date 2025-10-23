@@ -9,8 +9,8 @@
     {
       "playerName": "ryan",
       "score": 0,
-      "updates": 13,
-      "lastUpdate": "2025-10-22T14:45:04.795Z"
+      "updates": 14,
+      "lastUpdate": "2025-10-23T09:13:45.213Z"
     },
     {
       "playerName": "Ryan",
@@ -41,7 +41,13 @@
       "score": 50,
       "updates": 2,
       "lastUpdate": "2025-10-23T06:03:52.356Z"
+    },
+    {
+      "playerName": "Teio",
+      "score": 0,
+      "updates": 53,
+      "lastUpdate": "2025-10-23T09:06:11.749Z"
     }
   ],
-  "updatedAt": "2025-10-23T06:03:52.356Z"
+  "updatedAt": "2025-10-23T09:13:45.213Z"
 }

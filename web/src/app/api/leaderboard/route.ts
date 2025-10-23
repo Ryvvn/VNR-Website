@@ -16,6 +16,8 @@ export async function POST(req: Request) {
     if (!Number.isFinite(delta) && !Number.isFinite(total || NaN)) {
       return NextResponse.json({ error: "Invalid score input" }, { status: 400 });
     }
+    // Debug logging to verify submissions arriving from Unity
+    console.log("[LEADERBOARD POST]", { playerName, delta, total });
     const updated = upsertScore(playerName, delta || 0, total);
     broadcast("leaderboard", updated);
     return NextResponse.json({ ok: true, leaderboard: updated }, { status: 200 });

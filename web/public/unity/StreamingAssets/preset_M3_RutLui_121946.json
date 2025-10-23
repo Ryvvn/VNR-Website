@@ -13,8 +13,8 @@
     "flightTimeMax": 2.4
   },
   "streakRewards": {
-    "smokeAt": 5,
-    "hePlusAt": 4
+    "smokeAt": 3,
+    "hePlusAt": 3
   },
   "enemy": {
     "patrolSpeedMps": 1.7,
