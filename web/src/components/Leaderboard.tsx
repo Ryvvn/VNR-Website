@@ -16,11 +16,14 @@ type LeaderboardData = {
 export default function Leaderboard({ className = "" }: { className?: string }) {
   const [data, setData] = React.useState<LeaderboardData>({ entries: [], updatedAt: null });
 
-  React.useEffect(() => {
-    let es: EventSource | null = null;
-    let cancelled = false;
+  const isProd = process.env.NODE_ENV === "production";
 
-    async function loadInitial() {
+  React.useEffect(() => {
+    let cancelled = false;
+    let es: EventSource | null = null;
+    let interval: number | null = null;
+
+    async function load() {
       try {
         const res = await fetch("/api/leaderboard", { cache: "no-store" });
         const json = (await res.json()) as LeaderboardData;
@@ -28,7 +31,13 @@ export default function Leaderboard({ className = "" }: { className?: string }) 
       } catch {}
     }
 
-    function connectSSE() {
+    if (isProd) {
+      // Production: use simple polling instead of SSE (serverless friendly)
+      load();
+      interval = window.setInterval(load, 2000);
+    } else {
+      // Development: use SSE for true live updates
+      load();
       es = new EventSource("/api/leaderboard/stream");
       es.addEventListener("leaderboard", (e) => {
         try {
@@ -37,20 +46,27 @@ export default function Leaderboard({ className = "" }: { className?: string }) 
         } catch {}
       });
       es.onerror = () => {
-        // try reconnect after 2 seconds
+        // auto-reconnect after 2s in dev
         es?.close();
-        setTimeout(connectSSE, 2000);
+        setTimeout(() => {
+          if (cancelled) return;
+          es = new EventSource("/api/leaderboard/stream");
+          es.addEventListener("leaderboard", (e) => {
+            try {
+              const json = JSON.parse((e as MessageEvent).data) as LeaderboardData;
+              setData(json);
+            } catch {}
+          });
+        }, 2000);
       };
     }
-
-    loadInitial();
-    connectSSE();
 
     return () => {
       cancelled = true;
       es?.close();
+      if (interval) clearInterval(interval);
     };
-  }, []);
+  }, [isProd]);
 
   const sorted = [...data.entries].sort((a, b) => b.score - a.score).slice(0, 20);
   const showDebug = process.env.NODE_ENV !== "production";

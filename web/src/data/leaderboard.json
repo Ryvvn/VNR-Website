@@ -14,9 +14,9 @@
     },
     {
       "playerName": "Ryan",
-      "score": 100,
-      "updates": 23,
-      "lastUpdate": "2025-10-23T09:48:25.840Z"
+      "score": 150,
+      "updates": 24,
+      "lastUpdate": "2025-10-23T09:54:14.219Z"
     },
     {
       "playerName": "gray",
@@ -47,7 +47,13 @@
       "score": 0,
       "updates": 57,
       "lastUpdate": "2025-10-23T09:25:25.424Z"
+    },
+    {
+      "playerName": "nice",
+      "score": 50,
+      "updates": 1,
+      "lastUpdate": "2025-10-23T10:00:43.525Z"
     }
   ],
-  "updatedAt": "2025-10-23T09:48:25.840Z"
+  "updatedAt": "2025-10-23T10:00:43.525Z"
 }
