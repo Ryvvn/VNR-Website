@@ -47,8 +47,23 @@ export function upsertScore(playerName: string, delta: number, total?: number): 
   const idx = lb.entries.findIndex((e) => e.playerName === name);
 
   // Attempt-based scoring: every submission represents a single attempt.
-  // We store the score for the latest attempt (no summation).
-  const attemptScore = typeof total === "number" ? total : delta;
+  // We store the score for the latest attempt. Some Unity builds send a final
+  // submission with delta=0 and no total; in that case we avoid overwriting a
+  // previously non-zero score with 0.
+  const hasTotal = typeof total === "number" && Number.isFinite(total);
+  const hasDelta = Number.isFinite(delta);
+
+  let attemptScore: number;
+  if (hasTotal) {
+    attemptScore = total as number;
+  } else if (hasDelta && delta !== 0) {
+    attemptScore = delta;
+  } else if (hasDelta && delta === 0 && idx >= 0) {
+    // Preserve existing score if the submission carries no total and delta==0
+    attemptScore = lb.entries[idx].score;
+  } else {
+    attemptScore = 0;
+  }
 
   if (idx >= 0) {
     const existing = lb.entries[idx];
