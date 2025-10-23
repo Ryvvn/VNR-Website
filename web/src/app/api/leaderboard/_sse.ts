@@ -7,13 +7,13 @@ export function addClient(writer: Writer) {
   clients.add(writer);
   try {
     writer.write(encoder.encode(`: connected\n\n`));
-  } catch {}
+  } catch { }
 }
 
 export function removeClient(writer: Writer) {
   if (clients.has(writer)) {
     clients.delete(writer);
-    try { writer.close(); } catch {}
+    try { writer.close(); } catch { }
   }
 }
 
@@ -26,7 +26,7 @@ export function broadcast<T>(event: string, data: T) {
     } catch (e) {
       // Remove dead client
       clients.delete(w);
-      try { w.close(); } catch {}
+      try { w.close(); } catch { }
     }
   }
 }

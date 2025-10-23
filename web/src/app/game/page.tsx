@@ -99,8 +99,8 @@ export default function GamePage() {
       // After Unity is ready, send the name immediately
       const name = playerName.trim() || "Anonymous";
       try { inst.SendMessage("LeaderboardReporter", "SetPlayerName", name); } catch { }
-      // Ensure leaderboard posts are attempt-based (total only)
-      try { inst.SendMessage("LeaderboardReporter", "SetSubmitModeTotal", "true"); } catch { }
+      // Enable per-hit live updates (Unity should call HandleScoreDelta on each hit)
+      try { inst.SendMessage("LeaderboardReporter", "SetSubmitModeTotal", "false"); } catch { }
       // Unity owns cursor/pointer control. No web-side pointer management here.
     } catch (e: unknown) {
       console.error(e);

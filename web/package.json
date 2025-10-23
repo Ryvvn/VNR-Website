@@ -15,7 +15,8 @@
     "next": "15.5.6",
     "react": "19.1.0",
     "react-chrono": "^3.0.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "@vercel/kv": "^1.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

@@ -2,8 +2,10 @@ import { NextResponse } from "next/server";
 import { readLeaderboard, upsertScore } from "./_store";
 import { broadcast } from "./_sse";
 
+export const runtime = "nodejs"; // ensure Node runtime for fs/KV
+
 export async function GET() {
-  const data = readLeaderboard();
+  const data = await readLeaderboard();
   return NextResponse.json(data, { status: 200 });
 }
 
@@ -18,7 +20,7 @@ export async function POST(req: Request) {
     }
     // Debug logging to verify submissions arriving from Unity
     console.log("[LEADERBOARD POST]", { playerName, delta, total });
-    const updated = upsertScore(playerName, delta || 0, total);
+    const updated = await upsertScore(playerName, delta || 0, total);
     broadcast("leaderboard", updated);
     return NextResponse.json({ ok: true, leaderboard: updated }, { status: 200 });
   } catch (e: unknown) {

@@ -11,7 +11,7 @@ export async function GET(req: Request) {
   addClient(writer);
 
   // Send the current leaderboard immediately
-  const initial = readLeaderboard();
+  const initial = await readLeaderboard();
   try {
     const enc = new TextEncoder();
     const msg = `event: leaderboard\n` + `data: ${JSON.stringify(initial)}\n\n`;

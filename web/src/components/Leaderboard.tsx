@@ -28,7 +28,7 @@ export default function Leaderboard({ className = "" }: { className?: string }) 
         const res = await fetch("/api/leaderboard", { cache: "no-store" });
         const json = (await res.json()) as LeaderboardData;
         if (!cancelled) setData(json);
-      } catch {}
+      } catch { }
     }
 
     if (isProd) {
@@ -43,7 +43,7 @@ export default function Leaderboard({ className = "" }: { className?: string }) 
         try {
           const json = JSON.parse((e as MessageEvent).data) as LeaderboardData;
           setData(json);
-        } catch {}
+        } catch { }
       });
       es.onerror = () => {
         // auto-reconnect after 2s in dev
@@ -55,7 +55,7 @@ export default function Leaderboard({ className = "" }: { className?: string }) 
             try {
               const json = JSON.parse((e as MessageEvent).data) as LeaderboardData;
               setData(json);
-            } catch {}
+            } catch { }
           });
         }, 2000);
       };
