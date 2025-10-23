@@ -71,7 +71,7 @@ export default function GamePage() {
 
     return () => {
       if (unityInstance && "Quit" in unityInstance) {
-        try { (unityInstance as UnityInstance).Quit(); } catch {}
+        try { (unityInstance as UnityInstance).Quit(); } catch { }
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -162,7 +162,7 @@ export default function GamePage() {
             syncWithUnity={true}
             onEnd={() => {
               setOverlayEnded(true);
-              try { unityInstance?.SendMessage("LeaderboardReporter", "ReportFinalScore"); } catch {}
+              try { unityInstance?.SendMessage("LeaderboardReporter", "ReportFinalScore"); } catch { }
             }}
           />
         )}

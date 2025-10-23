@@ -26,10 +26,16 @@ function ensureFile(): void {
   }
 }
 
-async function kvClient(): Promise<any> {
+// Minimal KV client interface to avoid `any` types
+type KVClient = {
+  get<T>(key: string): Promise<T | null>;
+  set(key: string, value: unknown): Promise<void>;
+};
+
+async function kvClient(): Promise<KVClient> {
   // Dynamic import to avoid requiring the dependency in dev
-  const mod: any = await import("@vercel/kv");
-  return mod.kv;
+  const mod = await import("@vercel/kv");
+  return mod.kv as KVClient;
 }
 
 export async function readLeaderboard(): Promise<LeaderboardFile> {
