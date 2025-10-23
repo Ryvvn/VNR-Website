@@ -9,8 +9,8 @@
     {
       "playerName": "ryan",
       "score": 0,
-      "updates": 4,
-      "lastUpdate": "2025-10-22T11:57:15.931Z"
+      "updates": 13,
+      "lastUpdate": "2025-10-22T14:45:04.795Z"
     },
     {
       "playerName": "Ryan",
@@ -23,7 +23,19 @@
       "score": 0,
       "updates": 1,
       "lastUpdate": "2025-10-22T10:54:33.404Z"
+    },
+    {
+      "playerName": "Bakushin",
+      "score": 0,
+      "updates": 8,
+      "lastUpdate": "2025-10-22T13:51:43.376Z"
+    },
+    {
+      "playerName": "Goldship",
+      "score": 0,
+      "updates": 9,
+      "lastUpdate": "2025-10-22T14:01:22.051Z"
     }
   ],
-  "updatedAt": "2025-10-22T11:57:15.931Z"
+  "updatedAt": "2025-10-22T14:45:04.795Z"
 }
