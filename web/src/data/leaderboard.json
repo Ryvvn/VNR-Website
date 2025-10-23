@@ -9,14 +9,14 @@
     {
       "playerName": "ryan",
       "score": 0,
-      "updates": 14,
-      "lastUpdate": "2025-10-23T09:13:45.213Z"
+      "updates": 15,
+      "lastUpdate": "2025-10-23T09:21:37.383Z"
     },
     {
       "playerName": "Ryan",
-      "score": 0,
-      "updates": 21,
-      "lastUpdate": "2025-10-22T11:17:27.645Z"
+      "score": 100,
+      "updates": 23,
+      "lastUpdate": "2025-10-23T09:48:25.840Z"
     },
     {
       "playerName": "gray",
@@ -45,9 +45,9 @@
     {
       "playerName": "Teio",
       "score": 0,
-      "updates": 53,
-      "lastUpdate": "2025-10-23T09:06:11.749Z"
+      "updates": 57,
+      "lastUpdate": "2025-10-23T09:25:25.424Z"
     }
   ],
-  "updatedAt": "2025-10-23T09:13:45.213Z"
+  "updatedAt": "2025-10-23T09:48:25.840Z"
 }

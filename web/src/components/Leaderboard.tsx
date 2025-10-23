@@ -53,6 +53,8 @@ export default function Leaderboard({ className = "" }: { className?: string }) 
   }, []);
 
   const sorted = [...data.entries].sort((a, b) => b.score - a.score).slice(0, 20);
+  const showDebug = process.env.NODE_ENV !== "production";
+  const colCount = 3 + (showDebug ? 2 : 0);
 
   return (
     <div className={className}>
@@ -65,8 +67,8 @@ export default function Leaderboard({ className = "" }: { className?: string }) 
               <th className="p-2">Rank</th>
               <th className="p-2">Player</th>
               <th className="p-2">Score</th>
-              <th className="p-2">Updates</th>
-              <th className="p-2">Last Update</th>
+              {showDebug && <th className="p-2">Updates</th>}
+              {showDebug && <th className="p-2">Last Update</th>}
             </tr>
           </thead>
           <tbody>
@@ -75,13 +77,15 @@ export default function Leaderboard({ className = "" }: { className?: string }) 
                 <td className="p-2">{i + 1}</td>
                 <td className="p-2">{e.playerName}</td>
                 <td className="p-2 font-mono">{e.score}</td>
-                <td className="p-2">{e.updates}</td>
-                <td className="p-2 text-xs">{e.lastUpdate ? new Date(e.lastUpdate).toLocaleString() : ""}</td>
+                {showDebug && <td className="p-2">{e.updates}</td>}
+                {showDebug && (
+                  <td className="p-2 text-xs">{e.lastUpdate ? new Date(e.lastUpdate).toLocaleString() : ""}</td>
+                )}
               </tr>
             ))}
             {sorted.length === 0 && (
               <tr>
-                <td className="p-3 text-center" colSpan={5}>
+                <td className="p-3 text-center" colSpan={colCount}>
                   No entries yet. Play the game to post your score!
                 </td>
               </tr>
