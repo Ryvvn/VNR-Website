@@ -43,7 +43,7 @@
     "pointsRandomMax": 20,
     "pointsPerObjective": 50,
     "pointsForFinalBase": 200,
-    "objectiveCount": 3,
+    "objectiveCount": 50,
     "tanksPerObjective": 1,
     "distanceMinFactor": 0.6,
     "distanceMaxFactor": 0.9,
