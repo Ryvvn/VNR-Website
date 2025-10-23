@@ -37,7 +37,7 @@
     "meshPointsRanges": [],
     "minRandomCount": 1,
     "maxRandomCount": 3,
-    "randomRadius": 12.0,
+    "randomRadius": 10.0,
     "pointsPerRandom": 10,
     "pointsRandomMin": 5,
     "pointsRandomMax": 20,
@@ -48,6 +48,6 @@
     "distanceMinFactor": 0.6,
     "distanceMaxFactor": 0.9,
     "angleSpreadDeg": 25.0,
-    "secondsBetweenObjectives": 10.0
+    "secondsBetweenObjectives": 8.0
   }
 }
